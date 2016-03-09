@@ -8,8 +8,8 @@
 
 $array=array(
 "title"=>"blabla",
-"start"=>"2016-03-01",
-"end"=>"2016-03-31"
+"start"=>"2016-03-08",
+"end"=>"2016-03-10"
 );
 
 echo '['.json_encode($array).']';
