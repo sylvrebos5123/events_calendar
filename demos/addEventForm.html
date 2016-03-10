@@ -30,20 +30,19 @@
 
   </style>
 
-  <title>Bootstrap and Fullcalendar by SV</title>
+  <title>Bootstrap and Fullcalendar module by SV</title>
 
 
 <script type='text/javascript'>//<![CDATA[
 $(window).load(function(){
 $(document).ready(function() {
 
-      //var calendar = $('#calendar').fullCalendar({
 	 $('#calendar').fullCalendar({
       defaultView: 'agendaWeek',
-         timezone: 'UTC',
-
-         editable: false,
+        timezone: 'UTC',
+        editable: false,
         selectable: true,
+        timeFormat: 'H:mm',
 		events: {
 
 		url: 'php/file_test.php',
@@ -56,21 +55,19 @@ $(document).ready(function() {
 
 		starttime=moment(start).format('YYYY-MM-DDTHH:mm:ss'); 
         endtime=moment(end).format('YYYY-MM-DDTHH:mm:ss'); 
-          var mywhen = starttime + ' - ' + endtime;
+          //var mywhen = starttime + ' - ' + endtime;
           var split_starttime=starttime.split('T');
-		  alert(split_starttime[0]+' - '+split_starttime[1]);
           var split_endtime=endtime.split('T');
-          alert(split_endtime[0]+' - '+split_endtime[1]);
+
 
           var split_starttime=starttime.split('T');
 
-          $('#createEventModal #apptStartTime').val(start);
-          //$('#createEventModal #apptEndTime').val('2016-03-09T11:00:00');
           $('#createEventModal #start_date').val(split_starttime[0]);
           $('#createEventModal #start_time').val(split_starttime[1]);
-          $('#createEventModal #apptEndTime').val(end);
+          $('#createEventModal #end_date').val(split_endtime[0]);
+          $('#createEventModal #end_time').val(split_endtime[1]);
+
           $('#createEventModal #apptAllDay').val(allDay);
-          $('#createEventModal #when').text(mywhen);
           $('#createEventModal').modal('show');
        }
     });
@@ -84,22 +81,49 @@ $(document).ready(function() {
 
   function doSubmit(){
     $("#createEventModal").modal('hide');
-    console.log($('#apptStartTime').val());
-    console.log($('#apptEndTime').val());
-    console.log($('#apptAllDay').val());
-    //alert("form submitted");
-        
+
+    if($('#start_time').val()=='00:00')
+    {
+        startDateTime = moment($('#start_date').val()).format('YYYY-MM-DD');
+    }
+    else
+    {
+        startDateTime = moment($('#start_date').val()+' '+$('#start_time').val()).format('YYYY-MM-DDTHH:mm:ss');
+    }
+////////
+    if($('#end_time').val()=='00:00')
+    {
+      endDateTime = moment($('#end_date').val()).format('YYYY-MM-DD');
+    }
+    else
+    {
+      endDateTime = moment($('#end_date').val() + ' ' + $('#end_time').val()).format('YYYY-MM-DDTHH:mm:ss');
+    }
+
+      $.ajax({
+              method: "POST",
+              url: "php/add_event.php",
+              data: {
+                  event_title: $('#event_title').val(),
+                  event_place: $('#event_place').val(),
+                  start_date_time: startDateTime,
+                  end_date_time: endDateTime
+              }
+          })
+          .done(function( msg ) {
+              alert( "Data Saved: " + msg );
+          });
     $("#calendar").fullCalendar('renderEvent',
         {
-            title: $('#patientName').val(),
-            start: new Date($('#apptStartTime').val()),
-            end: new Date($('#apptEndTime').val()),
-            allDay: ($('#apptAllDay').val() == "true"),
+            title: $('#event_title').val()+' - '+$('#event_place').val(),
+            start: new Date(startDateTime),
+            end: new Date(endDateTime),
+            allDay: ($('#apptAllDay').val() == "true")
         },
         true);
    }
 });
-});//]]> 
+});
 
 </script>
 
@@ -119,22 +143,38 @@ $(document).ready(function() {
         </div>
         <div class="modal-body">
           <!-- form -->
-		  <form id="createAppointmentForm" class="form-horizontal">
-			<div class="form-group row">
-				<label class="col-sm-2" for="inputPatient">Subject:</label>
-				<div class="col-sm-10">
-					<input type="text" name="patientName" id="patientName" class="form-control">
-					  <input type="hidden" id="apptStartTime"/>
-					  <input type="hidden" id="apptEndTime"/>
-					  <input type="hidden" id="apptAllDay" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2" for="when">When:</label>
-				<div class="col-sm-10" id="when">
-				</div>
-                <input type="date" id="start_date" name="start_date" class="form-control">
-                <input type="time" id="start_time" name="start_time" class="form-control">
+		  <form id="createAppointmentForm" class="form-horizontal" action="php/add_event.php" method="post">
+              <div class="form-group row">
+                <input type="hidden" id="apptAllDay" />
+                <label class="col-sm-2" for="inputevent_title">Title:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="event_title" id="event_title" class="form-control">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-2" for="inputevent_place">Place:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="event_place" id="event_place" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+
+                <label class="col-sm-2" for="when">When:</label>
+                <div class="col-sm-3">
+                    <input type="date"  id="start_date" name="start_date" value="" class="form-control">
+                </div>
+                <div class="col-sm-2">
+                    <input type="time" id="start_time" name="start_time" class="form-control">
+                </div>
+              <br></br>
+
+                    <div class="col-sm-offset-2 col-sm-3">
+                        <input type="date" id="end_date" name="end_date" class="form-control">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="time" id="end_time" name="end_time" class="form-control">
+                    </div>
+
 			</div>
 		</form>
 		 <!-- form -->
@@ -146,9 +186,6 @@ $(document).ready(function() {
       </div>
     </div>
 </div>
- 
-
-  
 
   
 </body>
