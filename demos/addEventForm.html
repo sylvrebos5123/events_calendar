@@ -82,8 +82,9 @@ $(document).ready(function() {
   function doSubmit(){
     $("#createEventModal").modal('hide');
 
-    if($('#start_time').val()=='00:00')
+    if($('#start_time').val()=='00:00:00')
     {
+
         startDateTime = moment($('#start_date').val()).format('YYYY-MM-DD');
     }
     else
@@ -91,7 +92,7 @@ $(document).ready(function() {
         startDateTime = moment($('#start_date').val()+' '+$('#start_time').val()).format('YYYY-MM-DDTHH:mm:ss');
     }
 ////////
-    if($('#end_time').val()=='00:00')
+    if($('#end_time').val()=='00:00:00')
     {
       endDateTime = moment($('#end_date').val()).format('YYYY-MM-DD');
     }
@@ -99,6 +100,9 @@ $(document).ready(function() {
     {
       endDateTime = moment($('#end_date').val() + ' ' + $('#end_time').val()).format('YYYY-MM-DDTHH:mm:ss');
     }
+
+    //alert(startDateTime);
+    //alert(endDateTime);
 
       $.ajax({
               method: "POST",
@@ -116,8 +120,8 @@ $(document).ready(function() {
     $("#calendar").fullCalendar('renderEvent',
         {
             title: $('#event_title').val()+' - '+$('#event_place').val(),
-            start: new Date(startDateTime),
-            end: new Date(endDateTime),
+            start: startDateTime,
+            end: endDateTime,
             allDay: ($('#apptAllDay').val() == "true")
         },
         true);
