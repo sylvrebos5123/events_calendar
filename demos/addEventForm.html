@@ -101,6 +101,16 @@ $(document).ready(function() {
       endDateTime = moment($('#end_date').val() + ' ' + $('#end_time').val()).format('YYYY-MM-DDTHH:mm:ss');
     }
 
+
+    if(($('#end_time').val()=='00:00:00')&&($('#start_time').val()=='00:00:00'))
+    {
+        dayFlag=true;
+    }
+      else
+    {
+        dayFlag=false;
+    }
+
     //alert(startDateTime);
     //alert(endDateTime);
 
@@ -115,14 +125,14 @@ $(document).ready(function() {
               }
           })
           .done(function( msg ) {
-              alert( "Data Saved: " + msg );
+              alert( "Data Saved " + msg );
           });
     $("#calendar").fullCalendar('renderEvent',
         {
             title: $('#event_title').val()+' - '+$('#event_place').val(),
             start: startDateTime,
             end: endDateTime,
-            allDay: ($('#apptAllDay').val() == "true")
+            allDay: dayFlag//($('#apptAllDay').val() == "true")
         },
         true);
    }
