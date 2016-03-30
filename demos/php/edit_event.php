@@ -7,6 +7,11 @@ if(isset($_POST))
     {
         $_POST['id_event']=(int)$_POST['id_event'];
         $_POST[$k]=trim(htmlspecialchars($_POST[$k]));
+
+        if(empty($_POST['event_place']))
+        {
+            $_POST['event_place']='No place defined';
+        }
     }
 }
 else
