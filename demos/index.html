@@ -77,6 +77,8 @@ $(document).ready(function() {
 
           $('h4.modal-title').html('Create Event');
           $('#formEvent #id_event').val(0);
+          $('#formEvent #event_title').val('');
+          $('#formEvent #event_place').val('');
           $('#formEvent #start_date').val(split_starttime[0]);
           $('#formEvent #start_time').val(split_starttime[1]);
           $('#formEvent #end_date').val(split_endtime[0]);
@@ -205,6 +207,7 @@ $(document).ready(function() {
                       .done(function( msg ) {
                           //alert( "Data Saved " + msg );
                           $("#loaderDiv").hide();
+
                       });
 
           } //end else
@@ -269,7 +272,7 @@ $(document).ready(function() {
                         <input type="time" id="end_time" name="end_time" class="form-control">
                     </div>
 			</div>
-
+            <!--
               <div class="form-group row">
                   <label class="col-sm-2" for="inputrepeat_event">Repeat :</label>
                   <div class="col-sm-10">
@@ -289,7 +292,7 @@ $(document).ready(function() {
                   <div class="col-sm-8">
                       times
                   </div>
-              </div>
+              </div> -->
 		</form>
 		 <!-- form -->
         </div>
