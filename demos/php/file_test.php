@@ -23,4 +23,24 @@ foreach ($array_events as $k=>$v) {
     $i++;
 }
 
+$output_arrays[9]['id']=100;
+$output_arrays[9]['title']='Event to repeat';
+$output_arrays[9]['start']='2016-06-10T13:00:00';
+$output_arrays[9]['end']='2016-06-10T16:00:00';
+
+$j=1;
+
+for($i=0;$i<3;$i++)
+{
+    $nb_days=14*($i + 1);
+    $output_arrays[9+$j]['id']=100;
+    $output_arrays[9+$j]['title']='Event to repeat (repeat)';
+    $output_arrays[9+$j]['start']=date('Y-m-d', strtotime("2016-06-10 +".$nb_days." days")).'T13:00:00';
+    $output_arrays[9+$j]['end']=date('Y-m-d', strtotime("2016-06-10 +".$nb_days." days")).'T16:00:00';
+
+    $j++;
+}
+
+
+//echo date('Y-m-d', strtotime("+30 days"));
 echo json_encode($output_arrays);
