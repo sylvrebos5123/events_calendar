@@ -36,6 +36,13 @@ $(document).ready(function() {
         selectable: true,
         timeFormat: 'H:mm',
 
+         // add event name to title attribute on mouseover
+         eventMouseover: function(event, jsEvent, view) {
+             if (view.name !== 'agendaDay') {
+                 $(jsEvent.target).attr('title', event.title);
+             }
+         },
+
 		events: {
 
 		url: 'php/file_test.php',
@@ -52,7 +59,7 @@ $(document).ready(function() {
              //alert(mywhen);
              var split_starttime=starttime.split('T');
              var split_endtime=endtime.split('T');
-             var split_title=event.title.split('-');
+             var split_title=event.title.split('|');
              $('h4.modal-title').html('Edit Event');
              $('#formEvent #id_event').val(event.id);
              $('#formEvent #event_title').val(split_title[0].trim());
@@ -135,8 +142,6 @@ $(document).ready(function() {
   function doSubmit(){
 
 
-
-
     if($('#start_time').val()=='00:00:00')
     {
 
@@ -165,6 +170,8 @@ $(document).ready(function() {
     {
         dayFlag=false;
     }
+
+      //alert($('#event_title').val());
 
       if($('#event_title').val().trim()=='')
       {
